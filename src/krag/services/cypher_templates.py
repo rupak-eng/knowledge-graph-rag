@@ -28,11 +28,17 @@ TEMPLATES: dict[str, dict[str, Any]] = {
     "entity_neighborhood": {
         "description": "N-hop neighborhood facts around an entity.",
         "params": ["entity_id", "max_hops", "limit"],
+        # $max_hops cannot parameterize a var-length bound in Neo4j; the
+        # literal upper bound (5) covers the configured qa_max_hops=3 and
+        # WHERE length(p) <= $max_hops enforces the requested depth.
+        # Rel properties are projected as scalars (driver hydration drops
+        # them from relationship tuples).
         "cypher": """
-            MATCH (e:Entity {entity_id: $entity_id})-[r:REL*1..$max_hops]-(other:Entity)
-            WITH e, r, other LIMIT $limit
-            RETURN e.name AS src, [x IN r | x.rel][0] AS rel, other.name AS dst,
-                   [x IN r | x.source_chunk_ids][0] AS chunks
+            MATCH p = (e:Entity {entity_id: $entity_id})-[rs:REL*1..5]-(other:Entity)
+            WHERE length(p) <= $max_hops
+            WITH e, relationships(p)[0] AS r0, other LIMIT $limit
+            RETURN e.name AS src, r0.rel AS rel, other.name AS dst,
+                   r0.source_chunk_ids AS chunks
         """,
     },
     "path_between": {
@@ -40,8 +46,9 @@ TEMPLATES: dict[str, dict[str, Any]] = {
         "params": ["src_id", "dst_id", "max_hops"],
         "cypher": """
             MATCH p = shortestPath(
-              (a:Entity {entity_id: $src_id})-[r:REL*1..$max_hops]-(b:Entity {entity_id: $dst_id})
+              (a:Entity {entity_id: $src_id})-[rs:REL*1..5]-(b:Entity {entity_id: $dst_id})
             )
+            WHERE length(p) <= $max_hops
             RETURN [n IN nodes(p) | n.name] AS nodes,
                    [x IN relationships(p) | x.rel] AS rels,
                    [x IN relationships(p) | x.source_chunk_ids] AS chunks
@@ -82,9 +89,7 @@ def template_params(template_id: str) -> list[str]:
         raise ValueError(f"unknown Cypher template: {template_id}") from None
 
 
-def execute_in_memory(
-    template_id: str, params: dict[str, Any], store: Any
-) -> list[dict[str, Any]]:
+def execute_in_memory(template_id: str, params: dict[str, Any], store: Any) -> list[dict[str, Any]]:
     """Same semantics as the Cypher templates, over the in-memory store.
 
     ``store`` is an InMemoryGraphStore (imported lazily to avoid a cycle).
@@ -114,12 +119,10 @@ def execute_in_memory(
         ]
 
     if template_id == "path_between":
-        path = _bfs_path(
-            store, params["src_id"], params["dst_id"], int(params.get("max_hops", 3))
-        )
+        path = _bfs_path(store, params["src_id"], params["dst_id"], int(params.get("max_hops", 3)))
         if path is None:
             return []
-        names = [store.get_entity(eid).name for eid in path[0]]  # type: ignore[union-attr]
+        names = [store.get_entity(eid).name for eid in path[0]]
         return [{"nodes": names, "rels": path[1], "chunks": path[2]}]
 
     if template_id == "relation_outgoing":
@@ -129,9 +132,7 @@ def execute_in_memory(
         rows = []
         for s, rel, d, chunks in store.neighbors(params["entity_id"], 1, 200):
             if s.entity_id == params["entity_id"] and rel.value == params["rel"]:
-                rows.append(
-                    {"dst": d.name, "dst_type": d.entity_type.value, "chunks": chunks}
-                )
+                rows.append({"dst": d.name, "dst_type": d.entity_type.value, "chunks": chunks})
         return rows
 
     if template_id == "acquisitions_by_company":

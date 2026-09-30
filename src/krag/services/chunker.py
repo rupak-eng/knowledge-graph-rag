@@ -20,7 +20,7 @@ CHUNK_CHARS = 1500
 CHUNK_OVERLAP = 150
 
 
-def parse_10k_html(path: Path, doc_id: str, title: str) -> Document:
+def parse_10k_html(path: Path, doc_id: str, title: str) -> tuple[Document, str]:
     """Extract clean text from a 10-K HTML/XML filing, dropping XBRL tags."""
     raw = path.read_bytes()
     soup = BeautifulSoup(raw, "lxml")
