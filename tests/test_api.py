@@ -6,14 +6,14 @@ import pytest
 from fastapi.testclient import TestClient
 
 from krag.config import Settings, reset_settings
-from krag.domain.schemas import Chunk, RetrievedChunk, RetrievalResult, RouteDecision
+from krag.domain.schemas import Chunk, RetrievalResult, RetrievedChunk, RouteDecision
 from krag.services.answer import AnswerService
-from krag.services.cost import CostTracker
 from krag.services.chunker import chunk_section, split_sections
+from krag.services.cost import CostTracker
+from krag.services.embeddings import StubEmbeddingProvider
 from krag.services.llm import StubLLMProvider
 from krag.services.qa import QASystem
 from krag.services.router import RuleRouter
-from krag.services.embeddings import StubEmbeddingProvider
 from krag.storage.graph_store import InMemoryGraphStore
 from krag.storage.vector_store import InMemoryVectorStore
 
@@ -33,8 +33,12 @@ def _retrieval(chunks: list[RetrievedChunk]) -> RetrievalResult:
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
     return RetrievedChunk(
-        chunk_id=cid, doc_id="aapl", section="ITEM 1",
-        text=text, score=0.9, source="vector",
+        chunk_id=cid,
+        doc_id="aapl",
+        section="ITEM 1",
+        text=text,
+        score=0.9,
+        source="vector",
     )
 
 
@@ -42,7 +46,6 @@ def test_citations_validated_against_retrieved_set(
     answer_service: AnswerService,
 ) -> None:
     chunks = [_chunk("aapl#c00001", "Apple reported iPhone revenue of $200 billion.")]
-    retrieval = _retrieval(chunks)
     text, citations = answer_service._validate_citations(
         "Apple iPhone revenue was $200 billion. [aapl#c00001] Also see [msft#c99999].",
         chunks,
@@ -86,8 +89,10 @@ def test_chunker_sections_and_ids() -> None:
 def qa_system(monkeypatch: pytest.MonkeyPatch) -> QASystem:
     reset_settings()
     settings = Settings(
-        graph_backend="memory", vector_backend="memory",
-        llm_base_url="", llm_model="",
+        graph_backend="memory",
+        vector_backend="memory",
+        llm_base_url="",
+        llm_model="",
     )
     qa = QASystem(
         settings,
@@ -99,8 +104,11 @@ def qa_system(monkeypatch: pytest.MonkeyPatch) -> QASystem:
     )
     # seed one chunk so /ask has evidence
     chunk = Chunk(
-        chunk_id="aapl#c00000", doc_id="aapl", index=0,
-        section="ITEM 1", text="Apple iPhone revenue was $200 billion in fiscal 2024.",
+        chunk_id="aapl#c00000",
+        doc_id="aapl",
+        index=0,
+        section="ITEM 1",
+        text="Apple iPhone revenue was $200 billion in fiscal 2024.",
     )
     qa.vector.add([chunk], qa.embedder.embed([chunk.text]))
     return qa
