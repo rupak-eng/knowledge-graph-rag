@@ -16,8 +16,8 @@ import time
 from krag.domain.schemas import (
     Answer,
     Citation,
-    RetrievalResult,
     RetrievedChunk,
+    RetrievalResult,
 )
 from krag.services.cost import CostTracker
 from krag.services.llm import LLMProvider
@@ -50,8 +50,11 @@ class AnswerService:
         self._llm = llm
         self._cost = cost
 
-    def answer(self, question: str, retrieval: RetrievalResult) -> Answer:
+    def answer(
+        self, question: str, retrieval: RetrievalResult
+    ) -> Answer:
         t0 = time.perf_counter()
+        retrieved_ids = {c.chunk_id for c in retrieval.chunks}
 
         if not retrieval.chunks:
             return self._abstain(question, retrieval, t0, "no chunks retrieved")
@@ -62,14 +65,18 @@ class AnswerService:
             question=question,
         )
         result = self._llm.generate(prompt)
-        self._cost.record_llm(result.tokens_in, result.tokens_out, result.model, result.latency_ms)
+        self._cost.record_llm(
+            result.tokens_in, result.tokens_out, result.model, result.latency_ms
+        )
 
         text, citations = self._validate_citations(result.text, retrieval.chunks)
 
         abstained = text.strip() == "INSUFFICIENT_EVIDENCE" or not citations
         if not citations and text.strip() != "INSUFFICIENT_EVIDENCE":
             logger.warning("answer produced no valid citations; abstaining")
-            return self._abstain(question, retrieval, t0, "no valid citations after validation")
+            return self._abstain(
+                question, retrieval, t0, "no valid citations after validation"
+            )
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return Answer(
@@ -117,7 +124,9 @@ class AnswerService:
             if cid in chunk_by_id and cid not in seen:
                 seen.add(cid)
                 c = chunk_by_id[cid]
-                citations.append(Citation(chunk_id=cid, section=c.section, valid=True))
+                citations.append(
+                    Citation(chunk_id=cid, section=c.section, valid=True)
+                )
                 return m.group(0)
             logger.warning("stripping invalid citation [%s]", cid)
             return ""  # invalid citation: remove it
@@ -126,7 +135,9 @@ class AnswerService:
         cleaned = re.sub(r"[ \t]{2,}", " ", cleaned).strip()
         return cleaned, citations
 
-    def _abstain(self, question: str, retrieval: RetrievalResult, t0: float, reason: str) -> Answer:
+    def _abstain(
+        self, question: str, retrieval: RetrievalResult, t0: float, reason: str
+    ) -> Answer:
         logger.info("abstaining on %r: %s", question[:60], reason)
         return Answer(
             question=question,

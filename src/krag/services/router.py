@@ -13,7 +13,7 @@ import logging
 import re
 from typing import Protocol
 
-from krag.domain.schemas import RouteDecision, RoutePath
+from krag.domain.schemas import RouteDecision
 from krag.services.extractor import COMPANIES
 
 logger = logging.getLogger(__name__)
@@ -41,12 +41,6 @@ VECTOR_CUES = [
     r"\bhow much\b|\bwhat (was|were) the\b.*\b(revenue|income|profit|loss)\b",
     r"\bpolicy\b|\bpolicies\b",
     r"\bwhen\b.*\b(filed|reported|announced)\b",
-    # metric-seeking: graph holds entity relations, not financial figures
-    r"\b(drove|driv\w+|caused?)\b.*\b(growth|increase|decrease|decline)\b",
-    r"\b(grew|declined|increased|decreased|rose|fell)\b",
-    r"\bhow (much|many|far)\b",
-    r"\bpercent\b|\bpercentage\b",
-    r"\bwhat\b.*\b(trend|change)\b",
 ]
 
 HOP_CUES = [
@@ -68,15 +62,13 @@ class RuleRouter:
         vector_score = 0.0
 
         entities_found = self._find_entities(question)
-        graph_cue_matched = False
         if entities_found:
-            graph_score += 0.15
+            graph_score += 0.25
             reasons.append(f"mentions known entities: {', '.join(entities_found)}")
 
         for pat in GRAPH_CUES:
             if re.search(pat, q):
                 graph_score += 0.35
-                graph_cue_matched = True
                 reasons.append(f"graph cue matched: {pat[:40]}...")
                 break
 
@@ -108,34 +100,25 @@ class RuleRouter:
 
         if graph_score > vector_score:
             confidence = min(0.95, 0.5 + (graph_score - vector_score))
-            # entity mention alone is not enough for pure graph; need a graph cue
-            if not graph_cue_matched and confidence >= self._threshold:
-                path: RoutePath = "hybrid"
-                reasons.append("entity mention without graph cue; using hybrid instead of graph")
-            else:
-                path = "graph" if confidence >= self._threshold else "hybrid"
-            if path == "hybrid" and "hybrid instead of graph" not in " ".join(reasons):
+            path = "graph" if confidence >= self._threshold else "hybrid"
+            if path == "hybrid":
                 reasons.append(
                     f"graph-leaning but confidence {confidence:.2f} < "
                     f"{self._threshold}; falling back to hybrid"
                 )
             return RouteDecision(
-                path=path,
-                confidence=confidence,
-                reasons=reasons,
+                path=path, confidence=confidence, reasons=reasons,
                 entities_found=entities_found,
             )
         confidence = min(0.95, 0.5 + (vector_score - graph_score))
-        vpath: RoutePath = "vector" if confidence >= self._threshold else "hybrid"
-        if vpath == "hybrid":
+        path = "vector" if confidence >= self._threshold else "hybrid"
+        if path == "hybrid":
             reasons.append(
                 f"vector-leaning but confidence {confidence:.2f} < "
                 f"{self._threshold}; falling back to hybrid"
             )
         return RouteDecision(
-            path=vpath,
-            confidence=confidence,
-            reasons=reasons,
+            path=path, confidence=confidence, reasons=reasons,
             entities_found=entities_found,
         )
 
