@@ -98,7 +98,10 @@ def run_system(
             "tokens_in": answer.tokens_in if answer else 0,
             "tokens_out": answer.tokens_out if answer else 0,
             "llm_model": qa.llm.name,
-            "retrieved_chunks": [
+            "retrieved_chunk_ids": retrieved_ids,
+            # Full chunk objects kept for sample_outputs.jsonl below; stripped
+            # from the committed benchmark JSON to keep it pushable.
+            "_retrieved_chunks": [
                 {
                     "text": c.text,
                     "source": c.source,
@@ -222,13 +225,13 @@ def main() -> None:
         "per_question": {"vector_only": vec_results, "hybrid": hybrid_results},
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(report, indent=2))
 
     with open(args.out.parent / "routing_log.jsonl", "w") as f:
         for row in vec_log + hybrid_log:
             f.write(json.dumps(row) + "\n")
 
     # shared eval schema for the sibling LLM-eval project (>=10 real outputs)
+    # (written before _retrieved_chunks is stripped from the benchmark JSON)
     sample_path = Path(__file__).parent / "sample_outputs.jsonl"
     with open(sample_path, "w") as f:
         for row in hybrid_results[: max(10, len(hybrid_results) // 2)]:
@@ -243,7 +246,7 @@ def main() -> None:
                                 "source": f"{c['source']}:{c['section']}",
                                 "chunk_id": c["chunk_id"],
                             }
-                            for c in row["retrieved_chunks"][:6]
+                            for c in row["_retrieved_chunks"][:6]
                         ],
                         "expected": row["gold_answer"],
                         "metadata": {
@@ -256,6 +259,14 @@ def main() -> None:
                 )
                 + "\n"
             )
+
+    # Strip verbose chunk texts from the committed benchmark JSON
+    # (full contexts are preserved in sample_outputs.jsonl above)
+    for sys_rows in report["per_question"].values():
+        for row in sys_rows:
+            row.pop("_retrieved_chunks", None)
+    # Compact JSON (no indent) to stay under GitHub push arg limits
+    args.out.write_text(json.dumps(report, separators=(",", ":")))
 
     print(
         json.dumps(
