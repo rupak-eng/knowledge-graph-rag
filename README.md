@@ -47,9 +47,9 @@ Question → Router → Vector Search (pgvector) ←→ Graph Search (Neo4j)
 
 1. **No raw Cypher generation.** The LLM never writes Cypher. Code selects from parameterized, validated templates (`entity_neighborhood`, 1/2/3-hop fixed patterns).
 
-2. **Controlled ontology.** 9 relation types: `HAS_SEGMENT`, `SELLS_PRODUCT`, `HAS_SUBSIDIARY`, `ACQUIRED`, `LED_BY`, `COMPETES_WITH`, `OPERATES_IN`, `PARTNERS_WITH`, `USES_TECHNOLOGY`. All triples validated against the ontology.
+2. **Controlled ontology.** 12 relation types: `HAS_SEGMENT`, `HAS_SUBSIDIARY`, `ACQUIRED`, `SELLS_PRODUCT`, `LED_BY`, `REPORTS_METRIC`, `OPERATES_IN`, `COMPETES_WITH`, `DEPENDS_ON`, `PARTNERS_WITH`, `FACES_RISK`, `USES_TECHNOLOGY`. All triples validated against the ontology.
 
-3. **Deterministic ingestion.** Chunk IDs are content hashes (`{doc}#c{NNNNN}`). Re-running ingestion is idempotent — unchanged documents are skipped.
+3. **Deterministic ingestion.** Chunk IDs are deterministic positional IDs (`chunk_id_for(doc_id, index)`, e.g. `{doc}#c{NNNNN}`) shared by Neo4j and pgvector. Document-level SHA256 content hashes make re-ingestion idempotent — unchanged documents are skipped.
 
 4. **Entity resolution.** spaCy NER + rule-based extractors, with alias merging ("Apple Inc." → "Apple").
 
