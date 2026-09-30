@@ -16,6 +16,8 @@ from typing import Protocol
 
 from pydantic import BaseModel
 
+from krag.config import Settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,14 +25,22 @@ class LLMResult(BaseModel):
     text: str
     tokens_in: int = 0
     tokens_out: int = 0
+    # Reasoning/thinking tokens billed inside completion_tokens by some
+    # providers (e.g. gpt-oss on Groq). Tracked separately for honesty.
+    reasoning_tokens: int = 0
     latency_ms: float = 0.0
     model: str = ""
+    # True when the model returned empty content (e.g. finish_reason=length
+    # after spending the budget on reasoning); caller decides how to handle.
+    empty_content: bool = False
 
 
 class LLMProvider(Protocol):
     name: str
 
-    def generate(self, prompt: str, max_tokens: int = 1024) -> LLMResult: ...
+    def generate(
+        self, prompt: str, max_tokens: int = 1024, system: str | None = None
+    ) -> LLMResult: ...
 
 
 class StubLLMProvider:
@@ -42,7 +52,7 @@ class StubLLMProvider:
 
     name = "stub-extractive-v1"
 
-    def generate(self, prompt: str, max_tokens: int = 1024) -> LLMResult:
+    def generate(self, prompt: str, max_tokens: int = 1024, system: str | None = None) -> LLMResult:
         t0 = time.perf_counter()
         contexts = _parse_contexts(prompt)
         question = _parse_question(prompt)
@@ -73,9 +83,7 @@ def _parse_question(prompt: str) -> str:
     return m.group(1).strip() if m else ""
 
 
-def _extractive_answer(
-    question: str, contexts: list[tuple[str, str]], max_tokens: int
-) -> str:
+def _extractive_answer(question: str, contexts: list[tuple[str, str]], max_tokens: int) -> str:
     if not contexts:
         return "INSUFFICIENT_EVIDENCE"
     qwords = {
@@ -119,9 +127,7 @@ _STOPWORDS = frozenset(
 class OpenAICompatibleProvider:
     """Any OpenAI-compatible chat completions endpoint."""
 
-    def __init__(
-        self, base_url: str, api_key: str, model: str, timeout: int = 60
-    ) -> None:
+    def __init__(self, base_url: str, api_key: str, model: str, timeout: int = 60) -> None:
         import httpx
 
         self.name = f"openai-compatible:{model}"
@@ -132,7 +138,7 @@ class OpenAICompatibleProvider:
             timeout=timeout,
         )
 
-    def generate(self, prompt: str, max_tokens: int = 1024) -> LLMResult:
+    def generate(self, prompt: str, max_tokens: int = 1024, system: str | None = None) -> LLMResult:
         t0 = time.perf_counter()
         resp = self._client.post(
             "/chat/completions",
@@ -141,7 +147,8 @@ class OpenAICompatibleProvider:
                 "messages": [
                     {
                         "role": "system",
-                        "content": (
+                        "content": system
+                        or (
                             "Answer ONLY from the provided context. Cite every claim "
                             "as [chunk_id]. If the context is insufficient, reply "
                             "exactly: INSUFFICIENT_EVIDENCE"
@@ -166,10 +173,38 @@ class OpenAICompatibleProvider:
         )
 
 
-def build_llm_provider(
-    base_url: str, api_key: str, model: str, timeout: int = 60
-) -> LLMProvider:
+def build_llm_provider(base_url: str, api_key: str, model: str, timeout: int = 60) -> LLMProvider:
     if base_url and model:
         return OpenAICompatibleProvider(base_url, api_key, model, timeout)
     logger.info("No LLM configured; using deterministic stub provider")
+    return StubLLMProvider()
+
+
+def build_production_llm(settings: Settings) -> LLMProvider:
+    """Production LLM resolution order: Groq (Vault) -> explicit config -> stub.
+
+    The Groq credential is resolved transiently at runtime and never persisted.
+    """
+    from krag.services.groq_provider import build_groq_provider
+
+    choice = getattr(settings, "groq_model_choice", "default")
+    if choice == "quality":
+        groq_model = getattr(settings, "groq_quality_model", "openai/gpt-oss-120b")
+    else:
+        groq_model = getattr(settings, "groq_default_model", "openai/gpt-oss-20b")
+
+    groq = build_groq_provider(groq_model)
+    if groq is not None:
+        return groq
+    # explicit OpenAI-compatible config as second choice
+    base_url = getattr(settings, "llm_base_url", "")
+    model = getattr(settings, "llm_model", "")
+    if base_url and model:
+        return OpenAICompatibleProvider(
+            base_url,
+            getattr(settings, "llm_api_key", ""),
+            model,
+            int(getattr(settings, "llm_timeout_seconds", 60)),
+        )
+    logger.info("No LLM credential available; using deterministic stub provider")
     return StubLLMProvider()

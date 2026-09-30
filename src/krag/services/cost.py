@@ -18,6 +18,10 @@ PRICE_PER_1K: dict[str, tuple[float, float]] = {
     "claude-3-5-sonnet": (0.003, 0.015),
     "claude-3-5-haiku": (0.0008, 0.004),
     "stub-extractive-v1": (0.0, 0.0),
+    # Groq key used in this project is on the free tier: billed $0.00.
+    # Recorded as 0.0 deliberately — see benchmark report pricing notes.
+    "groq:openai/gpt-oss-20b": (0.0, 0.0),
+    "groq:openai/gpt-oss-120b": (0.0, 0.0),
 }
 
 
@@ -32,9 +36,7 @@ class CostTracker:
     model_label: str = "stub-extractive-v1"
     events: list[dict[str, object]] = field(default_factory=list)
 
-    def record_llm(
-        self, tokens_in: int, tokens_out: int, model: str, latency_ms: float
-    ) -> None:
+    def record_llm(self, tokens_in: int, tokens_out: int, model: str, latency_ms: float) -> None:
         self.llm_tokens_in += tokens_in
         self.llm_tokens_out += tokens_out
         self.llm_latency_ms += latency_ms
