@@ -12,8 +12,8 @@ import time
 
 from krag.domain.schemas import (
     GraphFact,
-    RetrievedChunk,
     RetrievalResult,
+    RetrievedChunk,
     RouteDecision,
 )
 from krag.services.cypher_templates import execute_in_memory, get_template  # noqa: F401
@@ -50,7 +50,7 @@ class HybridRetriever:
         t0 = time.perf_counter()
         route: RouteDecision = self._router.route(question)
         if force_route is not None:
-            route = route.model_copy(update={"path": force_route})  # type: ignore[typeddict-item]
+            route = route.model_copy(update={"path": force_route})
             route.reasons.append(f"route overridden to {force_route} by caller")
 
         k = top_k or self._top_k_vector
@@ -64,11 +64,21 @@ class HybridRetriever:
             graph_facts.extend(facts)
             chunks.extend(gchunks)
 
+        # Fallback: graph routing with zero graph evidence (unknown entities,
+        # empty graph) degrades to vector rather than abstaining silently.
+        if route.path == "graph" and not chunks and not graph_facts:
+            route.reasons.append("graph path yielded no evidence; falling back to vector search")
+            route = route.model_copy(update={"path": "hybrid"})
+            chunks.extend(self._vector_search(question, k))
+
         chunks = self._dedupe(chunks)
         latency_ms = (time.perf_counter() - t0) * 1000
         logger.info(
             "retrieve route=%s chunks=%d facts=%d latency=%.1fms",
-            route.path, len(chunks), len(graph_facts), latency_ms,
+            route.path,
+            len(chunks),
+            len(graph_facts),
+            latency_ms,
         )
         return RetrievalResult(
             chunks=chunks[: max(k, self._top_k_graph)],
@@ -141,12 +151,9 @@ class HybridRetriever:
                     nodes = row.get("nodes", [])
                     rels = row.get("rels", [])
                     chunk_lists = row.get("chunks", [])
-                    flat: list[str] = [
-                        c for cl in chunk_lists for c in (cl or [])
-                    ]
-                    hops = " -> ".join(
-                        f"{n}-[{r}]->" for n, r in zip(nodes, rels + [""])
-                    ).rstrip("->")
+                    flat: list[str] = [c for cl in chunk_lists for c in (cl or [])]
+                    pairs = zip(nodes, rels + [""], strict=True)
+                    hops = " -> ".join(f"{n}-[{r}]->" for n, r in pairs).rstrip("->")
                     facts.append(
                         GraphFact(
                             statement=f"PATH: {hops}{nodes[-1] if nodes else ''} "

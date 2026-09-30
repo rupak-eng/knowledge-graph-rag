@@ -10,12 +10,12 @@ from krag.domain.schemas import Answer, RoutePath
 from krag.services.answer import AnswerService
 from krag.services.cost import CostTracker
 from krag.services.embeddings import EmbeddingProvider
-from krag.services.llm import LLMProvider, build_llm_provider
+from krag.services.ingest import _default_embedder
+from krag.services.llm import LLMProvider, build_production_llm
 from krag.services.retriever import HybridRetriever
 from krag.services.router import Router, RuleRouter
 from krag.storage.graph_store import GraphStore, build_graph_store
 from krag.storage.vector_store import VectorStore, build_vector_store
-from krag.services.ingest import _default_embedder
 
 logger = logging.getLogger(__name__)
 
@@ -34,17 +34,16 @@ class QASystem:
     ) -> None:
         self.settings = settings
         self.graph = graph or build_graph_store(
-            settings.neo4j_uri, settings.neo4j_user,
-            settings.neo4j_password, settings.graph_backend,
+            settings.neo4j_uri,
+            settings.neo4j_user,
+            settings.neo4j_password,
+            settings.graph_backend,
         )
         self.vector = vector or build_vector_store(
             settings.database_url, settings.embedding_dim, settings.vector_backend
         )
         self.embedder = embedder or _default_embedder(settings)
-        self.llm = llm or build_llm_provider(
-            settings.llm_base_url, settings.llm_api_key,
-            settings.llm_model, settings.llm_timeout_seconds,
-        )
+        self.llm = llm or build_production_llm(settings)
         self.router = router or RuleRouter(settings.router_low_confidence_threshold)
         self.retriever = HybridRetriever(
             vector_store=self.vector,
