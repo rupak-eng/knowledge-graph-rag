@@ -1,0 +1,409 @@
+[
+ {
+  "answer": "Products and Services.",
+  "category": "graph",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 1,
+  "id": "q001",
+  "notes": "Graph HAS_SEGMENT edges; also visible in MD&A product/Service breakdown.",
+  "question": "What are Apple's two reportable segments in FY2024?"
+ },
+ {
+  "answer": "Satya Nadella.",
+  "category": "graph",
+  "chunk_ids": [
+   "msft#c00084"
+  ],
+  "hops": 1,
+  "id": "q002",
+  "notes": "Graph LED_BY edge; chunk states appointed CEO February 2014.",
+  "question": "Who is Microsoft's Chief Executive Officer?"
+ },
+ {
+  "answer": "October 13, 2023, for $75.4 billion.",
+  "category": "vector",
+  "chunk_ids": [
+   "msft#c00169"
+  ],
+  "hops": 1,
+  "id": "q003",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "When did Microsoft complete its acquisition of Activision Blizzard and for what purchase price?"
+ },
+ {
+  "answer": "Compute revenue grew 266% on higher shipments of the NVIDIA Hopper GPU computing platform for training and inference of LLMs, recommendation engines, and generative AI applications.",
+  "category": "vector",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 1,
+  "id": "q004",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "What drove NVIDIA's Compute revenue growth in fiscal 2024?"
+ },
+ {
+  "answer": "iPhone net sales were relatively flat during 2024 compared to 2023.",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 1,
+  "id": "q005",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "How did iPhone net sales change in 2024 compared to 2023?"
+ },
+ {
+  "answer": "Jen-Hsun Huang co-founded NVIDIA in 1993 and serves as President and Chief Executive Officer.",
+  "category": "vector",
+  "chunk_ids": [
+   "nvda#c00063"
+  ],
+  "hops": 1,
+  "id": "q006",
+  "notes": "Verbatim in executive-officers chunk.",
+  "question": "Who co-founded NVIDIA and what positions does he hold?"
+ },
+ {
+  "answer": "More Personal Computing.",
+  "category": "vector",
+  "chunk_ids": [
+   "msft#c00169"
+  ],
+  "hops": 1,
+  "id": "q007",
+  "notes": "Verbatim: 'Activision Blizzard is reported as part of our More Personal Computing segment.'",
+  "question": "In which Microsoft segment is Activision Blizzard reported?"
+ },
+ {
+  "answer": "Compute & Networking and Graphics.",
+  "category": "graph",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 1,
+  "id": "q008",
+  "notes": "Graph HAS_SEGMENT edges; named in MD&A chunk.",
+  "question": "What are NVIDIA's two reportable segments?"
+ },
+ {
+  "answer": "Higher net sales of laptops.",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 1,
+  "id": "q009",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "What primarily drove the increase in Mac net sales during 2024?"
+ },
+ {
+  "answer": "Mellanox Technologies is a subsidiary of NVIDIA.",
+  "category": "graph",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 1,
+  "id": "q010",
+  "notes": "Graph HAS_SUBSIDIARY edge; Networking growth cites InfiniBand (Mellanox tech).",
+  "question": "What is the relationship between Mellanox Technologies and NVIDIA?"
+ },
+ {
+  "answer": "Higher net sales from advertising, the App Store, and cloud services.",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 1,
+  "id": "q011",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "What drove the increase in Apple's Services net sales during 2024?"
+ },
+ {
+  "answer": "Networking revenue was up 133% due to higher shipments of InfiniBand.",
+  "category": "vector",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 1,
+  "id": "q012",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "By how much did NVIDIA's Networking revenue grow and what drove it?"
+ },
+ {
+  "answer": "Microsoft acquired Activision Blizzard; its CEO is Satya Nadella.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00169",
+   "msft#c00084"
+  ],
+  "hops": 2,
+  "id": "q013",
+  "notes": "Acquisition fact + LED_BY edge.",
+  "question": "Which company acquired Activision Blizzard, and who is that company's CEO?"
+ },
+ {
+  "answer": "Jen-Hsun Huang co-founded NVIDIA in 1993; the Compute & Networking segment (Compute revenue) grew 266% on Hopper GPU shipments.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "nvda#c00063",
+   "nvda#c00178"
+  ],
+  "hops": 2,
+  "id": "q014",
+  "notes": "Founder fact + segment growth fact.",
+  "question": "NVIDIA's CEO co-founded the company in 1993. Which segment's growth was driven by Hopper GPU shipments?"
+ },
+ {
+  "answer": "Advertising services, AppleCare service and support products, and cloud services.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "aapl#c00107",
+   "aapl#c00029"
+  ],
+  "hops": 2,
+  "id": "q015",
+  "notes": "Growth driver chunk + business-description chunk listing Services.",
+  "question": "Apple's Services net sales increased in 2024. Name three Services offerings described in the 10-K."
+ },
+ {
+  "answer": "The NVIDIA Hopper GPU computing platform; NVIDIA sells it.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 2,
+  "id": "q016",
+  "notes": "Chunk names the platform; graph SELLS_PRODUCT links NVIDIA to its GPU platforms.",
+  "question": "What product drove NVIDIA's 266% Compute growth, and which company sells it?"
+ },
+ {
+  "answer": "The acquisition of Activision Blizzard for $75.4 billion.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00084",
+   "msft#c00169"
+  ],
+  "hops": 2,
+  "id": "q017",
+  "notes": "CEO tenure fact + acquisition fact.",
+  "question": "Satya Nadella became Microsoft's CEO in February 2014. What major acquisition did Microsoft complete in October 2023 under his leadership?"
+ },
+ {
+  "answer": "iPhone belongs to the Products segment; iPhone net sales were relatively flat in 2024 versus 2023.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 2,
+  "id": "q018",
+  "notes": "Segment structure + product trend, same MD&A chunk; graph HAS_SEGMENT/SELLS_PRODUCT.",
+  "question": "iPhone belongs to which Apple segment, and how did iPhone net sales trend in 2024?"
+ },
+ {
+  "answer": "Activision Blizzard; reported in the More Personal Computing segment.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00169"
+  ],
+  "hops": 2,
+  "id": "q019",
+  "notes": "Graph HAS_SUBSIDIARY + ACQUIRED edges; chunk confirms segment.",
+  "question": "Which Microsoft subsidiary was acquired for $75.4 billion in October 2023, and in which segment is it reported?"
+ },
+ {
+  "answer": "Jen-Hsun (Jensen) Huang.",
+  "category": "graph",
+  "chunk_ids": [
+   "nvda#c00063"
+  ],
+  "hops": 2,
+  "id": "q020",
+  "notes": "Co-founder + LED_BY combined in one chunk; 2-hop via founder->leader.",
+  "question": "Who has served as NVIDIA's President and CEO since the company's inception in 1993?"
+ },
+ {
+  "answer": "Mac net sales increased, driven primarily by higher net sales of laptops. iPhone was flat; iPad decreased.",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 2,
+  "id": "q021",
+  "notes": "Requires combining three product trends from the chunk.",
+  "question": "Apple's Products segment includes iPhone, Mac, and iPad. Which of these grew in 2024 and why?"
+ },
+ {
+  "answer": "Azure.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00183"
+  ],
+  "hops": 2,
+  "id": "q022",
+  "notes": "Chunk: 'Gross margin increased $11.6 billion or 19% driven by growth in Azure.'",
+  "question": "Microsoft's Intelligent Cloud segment is assessed with cloud metrics. Which product's growth is cited as driving gross margin there?"
+ },
+ {
+  "answer": "Satya Nadella, CEO of Microsoft, appointed Chief Executive Officer in February 2014.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00169",
+   "msft#c00084"
+  ],
+  "hops": 3,
+  "id": "q023",
+  "notes": "Acquisition -> company -> leader -> tenure date.",
+  "question": "Which CEO led the company that paid $75.4 billion for Activision Blizzard, and when did he become CEO?"
+ },
+ {
+  "answer": "Jen-Hsun Huang leads NVIDIA as President and CEO; he co-founded it in 1993.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "nvda#c00178",
+   "nvda#c00063"
+  ],
+  "hops": 3,
+  "id": "q024",
+  "notes": "Product growth -> company -> founder/leader -> founding year.",
+  "question": "NVIDIA's Compute revenue grew 266% on Hopper GPU shipments for LLM training. Who leads NVIDIA and in what year did he co-found it?"
+ },
+ {
+  "answer": "Apple; its other segment is Products; iPhone net sales were relatively flat in 2024.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "aapl#c00107",
+   "aapl#c00029"
+  ],
+  "hops": 3,
+  "id": "q025",
+  "notes": "Services growth -> company -> segments -> product trend.",
+  "question": "Apple's Services segment grew in 2024 on advertising, App Store, and cloud. Which company owns these Services, what is its other segment, and how did iPhone sales trend?"
+ },
+ {
+  "answer": "Satya Nadella; appointed Chairman of the Board in June 2021 (CEO since February 2014).",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00169",
+   "msft#c00084"
+  ],
+  "hops": 3,
+  "id": "q026",
+  "notes": "Acquisition -> segment -> company -> leader -> chairman date.",
+  "question": "Microsoft completed a $75.4 billion acquisition in October 2023 that is reported in More Personal Computing. Who is Microsoft's CEO and when was he appointed Chairman?"
+ },
+ {
+  "answer": "Compute & Networking; Jen-Hsun Huang co-founded NVIDIA in 1993.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "nvda#c00178",
+   "nvda#c00063"
+  ],
+  "hops": 3,
+  "id": "q027",
+  "notes": "Two growth drivers -> segment -> founder.",
+  "question": "The Hopper GPU platform drove NVIDIA's Compute growth. NVIDIA's Networking grew 133% on InfiniBand. Which segment contains both, and who co-founded the company?"
+ },
+ {
+  "answer": "Microsoft (Satya Nadella).",
+  "category": "graph",
+  "chunk_ids": [
+   "msft#c00084",
+   "msft#c00169"
+  ],
+  "hops": 3,
+  "id": "q028",
+  "notes": "Three constraints converging on one company via graph + chunks.",
+  "question": "Which company's CEO was appointed in February 2014, acquired Activision Blizzard for $75.4B, and reports it in More Personal Computing?"
+ },
+ {
+  "answer": "Productivity and Business Processes, Intelligent Cloud, and More Personal Computing.",
+  "category": "graph",
+  "chunk_ids": [
+   "msft#c00175",
+   "msft#c00169"
+  ],
+  "hops": 1,
+  "id": "q029",
+  "notes": "Graph HAS_SEGMENT edges; segments named across MD&A chunks.",
+  "question": "What are Microsoft's three reportable segments?"
+ },
+ {
+  "answer": "Apple TV, HomePod, HomePod mini, AirPods, and Apple Watch (among others).",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00029"
+  ],
+  "hops": 1,
+  "id": "q030",
+  "notes": "Business description chunk lists these products.",
+  "question": "Which Apple products are named as part of the Wearables, Home and Accessories category?"
+ },
+ {
+  "answer": "Operating income increased $6.4 billion or 19%, with gross margin driven by growth in Office 365.",
+  "category": "vector",
+  "chunk_ids": [
+   "msft#c00182"
+  ],
+  "hops": 1,
+  "id": "q031",
+  "notes": "Verbatim figures in MD&A chunk.",
+  "question": "How much did Microsoft's Productivity and Business Processes operating income increase, and what drove it?"
+ },
+ {
+  "answer": "Growth in Gaming of 15%, driven by higher sell-in to partners following normalization of channel inventory levels.",
+  "category": "vector",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 1,
+  "id": "q032",
+  "notes": "Verbatim in MD&A chunk.",
+  "question": "NVIDIA's Graphics revenue grew 15% on what driver?"
+ },
+ {
+  "answer": "A portfolio of fee-based service and support products offering priority access to Apple technical support, access to the authorized service network for repair/replacement, and in many cases coverage for accidental damage or theft/loss.",
+  "category": "vector",
+  "chunk_ids": [
+   "aapl#c00029"
+  ],
+  "hops": 2,
+  "id": "q033",
+  "notes": "Requires linking Services -> AppleCare -> description.",
+  "question": "Apple's Services includes AppleCare. What does AppleCare provide?"
+ },
+ {
+  "answer": "Microsoft competes with Google LLC (among others); Azure sits in the Intelligent Cloud segment.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "msft#c00175"
+  ],
+  "hops": 2,
+  "id": "q034",
+  "notes": "Graph COMPETES_WITH edge + segment fact. Chunk msft#c00175 covers Intelligent Cloud metrics.",
+  "question": "Which two companies compete in cloud computing according to Microsoft's 10-K, and which Microsoft segment holds Azure?"
+ },
+ {
+  "answer": "The Arm acquisition termination cost \u2014 NVIDIA terminated its proposed acquisition of Arm.",
+  "category": "vector",
+  "chunk_ids": [
+   "nvda#c00178"
+  ],
+  "hops": 2,
+  "id": "q035",
+  "notes": "Chunk: '$1.4 billion Arm acquisition termination cost in fiscal year 2023.'",
+  "question": "NVIDIA spent $1.4 billion on what terminated transaction in fiscal 2023?"
+ },
+ {
+  "answer": "The Products segment; the decrease was due primarily to lower net sales of Wearables and Accessories.",
+  "category": "hybrid",
+  "chunk_ids": [
+   "aapl#c00107"
+  ],
+  "hops": 2,
+  "id": "q036",
+  "notes": "Category decline (chunk) + segment membership (Products segment contains hardware categories).",
+  "question": "Wearables, Home and Accessories net sales decreased in 2024. Which Apple reportable segment contains this category, and what drove the decrease?"
+ }
+]
