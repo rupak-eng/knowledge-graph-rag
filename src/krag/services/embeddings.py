@@ -19,14 +19,18 @@ class EmbeddingProvider(Protocol):
 
 
 class SentenceTransformerProvider:
-    """Real embeddings via sentence-transformers (runs offline after download)."""
+    """Real embeddings via sentence-transformers.
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
+    ``model_name_or_path`` may be a HF model id (downloaded once, then cached)
+    or a local snapshot directory (offline environments).
+    """
+
+    def __init__(self, model_name_or_path: str = "all-MiniLM-L6-v2") -> None:
         from sentence_transformers import SentenceTransformer
 
-        self._model = SentenceTransformer(model_name)
-        self.dim: int = int(self._model.get_sentence_embedding_dimension())
-        logger.info("Loaded embedding model %s (dim=%d)", model_name, self.dim)
+        self._model = SentenceTransformer(model_name_or_path)
+        self.dim: int = int(self._model.get_sentence_embedding_dimension() or 0)
+        logger.info("Loaded embedding model %s (dim=%d)", model_name_or_path, self.dim)
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         t0 = time.perf_counter()
@@ -44,9 +48,7 @@ class StubEmbeddingProvider:
     def embed(self, texts: list[str]) -> list[list[float]]:
         out: list[list[float]] = []
         for text in texts:
-            rng = np.random.default_rng(
-                int(hashlib.sha256(text.encode()).hexdigest()[:16], 16)
-            )
+            rng = np.random.default_rng(int(hashlib.sha256(text.encode()).hexdigest()[:16], 16))
             vec = rng.standard_normal(self.dim).astype(np.float32)
             vec /= float(np.linalg.norm(vec)) + 1e-12
             out.append([float(x) for x in vec])
