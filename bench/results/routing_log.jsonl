@@ -1,0 +1,72 @@
+{"system": "vector-only", "id": "q001", "question": "What are Apple's two reportable segments in FY2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q002", "question": "Who is Microsoft's Chief Executive Officer?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q003", "question": "When did Microsoft complete its acquisition of Activision Blizzard and for what purchase price?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q004", "question": "What drove NVIDIA's Compute revenue growth in fiscal 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q005", "question": "How did iPhone net sales change in 2024 compared to 2023?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q006", "question": "Who co-founded NVIDIA and what positions does he hold?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q007", "question": "In which Microsoft segment is Activision Blizzard reported?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q008", "question": "What are NVIDIA's two reportable segments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q009", "question": "What primarily drove the increase in Mac net sales during 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q010", "question": "What is the relationship between Mellanox Technologies and NVIDIA?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q011", "question": "What drove the increase in Apple's Services net sales during 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q012", "question": "By how much did NVIDIA's Networking revenue grow and what drove it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q013", "question": "Which company acquired Activision Blizzard, and who is that company's CEO?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q014", "question": "NVIDIA's CEO co-founded the company in 1993. Which segment's growth was driven by Hopper GPU shipments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q015", "question": "Apple's Services net sales increased in 2024. Name three Services offerings described in the 10-K.", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q016", "question": "What product drove NVIDIA's 266% Compute growth, and which company sells it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q017", "question": "Satya Nadella became Microsoft's CEO in February 2014. What major acquisition did Microsoft complete in October 2023 under his leadership?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q018", "question": "iPhone belongs to which Apple segment, and how did iPhone net sales trend in 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q019", "question": "Which Microsoft subsidiary was acquired for $75.4 billion in October 2023, and in which segment is it reported?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q020", "question": "Who has served as NVIDIA's President and CEO since the company's inception in 1993?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q021", "question": "Apple's Products segment includes iPhone, Mac, and iPad. Which of these grew in 2024 and why?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q022", "question": "Microsoft's Intelligent Cloud segment is assessed with cloud metrics. Which product's growth is cited as driving gross margin there?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q023", "question": "Which CEO led the company that paid $75.4 billion for Activision Blizzard, and when did he become CEO?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q024", "question": "NVIDIA's Compute revenue grew 266% on Hopper GPU shipments for LLM training. Who leads NVIDIA and in what year did he co-found it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q025", "question": "Apple's Services segment grew in 2024 on advertising, App Store, and cloud. Which company owns these Services, what is its other segment, and how did iPhone sales trend?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q026", "question": "Microsoft completed a $75.4 billion acquisition in October 2023 that is reported in More Personal Computing. Who is Microsoft's CEO and when was he appointed Chairman?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q027", "question": "The Hopper GPU platform drove NVIDIA's Compute growth. NVIDIA's Networking grew 133% on InfiniBand. Which segment contains both, and who co-founded the company?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q028", "question": "Which company's CEO was appointed in February 2014, acquired Activision Blizzard for $75.4B, and reports it in More Personal Computing?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q029", "question": "What are Microsoft's three reportable segments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q030", "question": "Which Apple products are named as part of the Wearables, Home and Accessories category?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q031", "question": "How much did Microsoft's Productivity and Business Processes operating income increase, and what drove it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q032", "question": "NVIDIA's Graphics revenue grew 15% on what driver?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q033", "question": "Apple's Services includes AppleCare. What does AppleCare provide?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q034", "question": "Which two companies compete in cloud computing according to Microsoft's 10-K, and which Microsoft segment holds Azure?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q035", "question": "NVIDIA spent $1.4 billion on what terminated transaction in fiscal 2023?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "vector-only", "id": "q036", "question": "Wearables, Home and Accessories net sales decreased in 2024. Which Apple reportable segment contains this category, and what drove the decrease?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q001", "question": "What are Apple's two reportable segments in FY2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q002", "question": "Who is Microsoft's Chief Executive Officer?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q003", "question": "When did Microsoft complete its acquisition of Activision Blizzard and for what purchase price?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q004", "question": "What drove NVIDIA's Compute revenue growth in fiscal 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q005", "question": "How did iPhone net sales change in 2024 compared to 2023?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q006", "question": "Who co-founded NVIDIA and what positions does he hold?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q007", "question": "In which Microsoft segment is Activision Blizzard reported?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q008", "question": "What are NVIDIA's two reportable segments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q009", "question": "What primarily drove the increase in Mac net sales during 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q010", "question": "What is the relationship between Mellanox Technologies and NVIDIA?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q011", "question": "What drove the increase in Apple's Services net sales during 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q012", "question": "By how much did NVIDIA's Networking revenue grow and what drove it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q013", "question": "Which company acquired Activision Blizzard, and who is that company's CEO?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q014", "question": "NVIDIA's CEO co-founded the company in 1993. Which segment's growth was driven by Hopper GPU shipments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q015", "question": "Apple's Services net sales increased in 2024. Name three Services offerings described in the 10-K.", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q016", "question": "What product drove NVIDIA's 266% Compute growth, and which company sells it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q017", "question": "Satya Nadella became Microsoft's CEO in February 2014. What major acquisition did Microsoft complete in October 2023 under his leadership?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q018", "question": "iPhone belongs to which Apple segment, and how did iPhone net sales trend in 2024?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q019", "question": "Which Microsoft subsidiary was acquired for $75.4 billion in October 2023, and in which segment is it reported?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q020", "question": "Who has served as NVIDIA's President and CEO since the company's inception in 1993?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q021", "question": "Apple's Products segment includes iPhone, Mac, and iPad. Which of these grew in 2024 and why?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q022", "question": "Microsoft's Intelligent Cloud segment is assessed with cloud metrics. Which product's growth is cited as driving gross margin there?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q023", "question": "Which CEO led the company that paid $75.4 billion for Activision Blizzard, and when did he become CEO?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q024", "question": "NVIDIA's Compute revenue grew 266% on Hopper GPU shipments for LLM training. Who leads NVIDIA and in what year did he co-found it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q025", "question": "Apple's Services segment grew in 2024 on advertising, App Store, and cloud. Which company owns these Services, what is its other segment, and how did iPhone sales trend?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q026", "question": "Microsoft completed a $75.4 billion acquisition in October 2023 that is reported in More Personal Computing. Who is Microsoft's CEO and when was he appointed Chairman?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q027", "question": "The Hopper GPU platform drove NVIDIA's Compute growth. NVIDIA's Networking grew 133% on InfiniBand. Which segment contains both, and who co-founded the company?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q028", "question": "Which company's CEO was appointed in February 2014, acquired Activision Blizzard for $75.4B, and reports it in More Personal Computing?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q029", "question": "What are Microsoft's three reportable segments?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q030", "question": "Which Apple products are named as part of the Wearables, Home and Accessories category?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q031", "question": "How much did Microsoft's Productivity and Business Processes operating income increase, and what drove it?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q032", "question": "NVIDIA's Graphics revenue grew 15% on what driver?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q033", "question": "Apple's Services includes AppleCare. What does AppleCare provide?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q034", "question": "Which two companies compete in cloud computing according to Microsoft's 10-K, and which Microsoft segment holds Azure?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q035", "question": "NVIDIA spent $1.4 billion on what terminated transaction in fiscal 2023?", "route": "error", "confidence": 0.0, "reasons": []}
+{"system": "hybrid", "id": "q036", "question": "Wearables, Home and Accessories net sales decreased in 2024. Which Apple reportable segment contains this category, and what drove the decrease?", "route": "error", "confidence": 0.0, "reasons": []}
