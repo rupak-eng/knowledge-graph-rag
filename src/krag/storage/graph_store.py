@@ -167,9 +167,7 @@ class Neo4jGraphStore:
             aliases = list(
                 dict.fromkeys(list(existing["aliases"] or []) + entity.aliases + [entity.name])
             )
-            chunks = list(
-                dict.fromkeys(list(existing["chunks"] or []) + entity.source_chunk_ids)
-            )
+            chunks = list(dict.fromkeys(list(existing["chunks"] or []) + entity.source_chunk_ids))
             s.run(
                 "MATCH (e:Entity {entity_id: $eid}) "
                 "SET e.aliases = $aliases, e.source_chunk_ids = $chunks",
@@ -177,9 +175,7 @@ class Neo4jGraphStore:
                 aliases=aliases,
                 chunks=chunks,
             )
-            return entity.model_copy(
-                update={"aliases": aliases, "source_chunk_ids": chunks}
-            )
+            return entity.model_copy(update={"aliases": aliases, "source_chunk_ids": chunks})
 
     def merge_relation(self, relation: Relation) -> None:
         with self._driver.session() as s:
@@ -201,9 +197,7 @@ class Neo4jGraphStore:
                 )
             else:
                 chunks = list(
-                    dict.fromkeys(
-                        list(existing["chunks"] or []) + relation.source_chunk_ids
-                    )
+                    dict.fromkeys(list(existing["chunks"] or []) + relation.source_chunk_ids)
                 )
                 s.run(
                     "MATCH (a:Entity {entity_id: $src})-[r:REL {rel: $rel}]->"
@@ -216,9 +210,7 @@ class Neo4jGraphStore:
 
     def get_entity(self, entity_id: str) -> Entity | None:
         with self._driver.session() as s:
-            rec = s.run(
-                "MATCH (e:Entity {entity_id: $eid}) RETURN e", eid=entity_id
-            ).single()
+            rec = s.run("MATCH (e:Entity {entity_id: $eid}) RETURN e", eid=entity_id).single()
         return _row_to_entity(rec["e"]) if rec else None
 
     def find_by_name(self, name: str) -> Entity | None:
@@ -232,11 +224,19 @@ class Neo4jGraphStore:
     def neighbors(
         self, entity_id: str, max_hops: int = 2, limit: int = 50
     ) -> list[tuple[Entity, RelationType, Entity, list[str]]]:
+        # NOTE: Neo4j does not allow parameters for variable-length bounds
+        # ([r*1..$hops]). The bound literal is fixed at 5 and the effective
+        # depth is enforced with WHERE length(p) <= $hops — still fully
+        # parameterized, no user input in the query string.
+        # Relationship properties are projected as scalars: the driver's
+        # .data() hydration drops rel properties from relationship tuples.
         with self._driver.session() as s:
             rows = s.run(
                 """
-                MATCH (a:Entity {entity_id: $eid})-[r:REL*1..$hops]-(b:Entity)
-                RETURN a, r, b LIMIT $limit
+                MATCH p = (a:Entity {entity_id: $eid})-[rs:REL*1..5]-(b:Entity)
+                WHERE length(p) <= $hops
+                WITH a, relationships(p)[0] AS r0, b LIMIT $limit
+                RETURN a AS a, r0.rel AS rel, r0.source_chunk_ids AS chunks, b AS b
                 """,
                 eid=entity_id,
                 hops=max_hops,
@@ -244,14 +244,12 @@ class Neo4jGraphStore:
             ).data()
         out = []
         for row in rows:
-            # r is a path; take the first hop for the fact rendering
-            rel = row["r"][0] if isinstance(row["r"], list) else row["r"]
             out.append(
                 (
                     _row_to_entity(row["a"]),
-                    RelationType(rel["rel"]),
+                    RelationType(row["rel"]),
                     _row_to_entity(row["b"]),
-                    list(rel.get("source_chunk_ids", [])),
+                    list(row["chunks"] or []),
                 )
             )
         return out
@@ -265,15 +263,30 @@ class Neo4jGraphStore:
 
     def entity_count(self) -> int:
         with self._driver.session() as s:
-            return s.run("MATCH (e:Entity) RETURN count(e) AS c").single()["c"]  # type: ignore[index]
+            return int(s.run("MATCH (e:Entity) RETURN count(e) AS c").single()["c"])  # type: ignore[index]
 
     def relation_count(self) -> int:
         with self._driver.session() as s:
-            return s.run("MATCH ()-[r:REL]->() RETURN count(r) AS c").single()["c"]  # type: ignore[index]
+            return int(s.run("MATCH ()-[r:REL]->() RETURN count(r) AS c").single()["c"])  # type: ignore[index]
 
     def clear(self) -> None:
         with self._driver.session() as s:
             s.run("MATCH (n) DETACH DELETE n")
+
+    def delete_by_name_prefix(self, prefix: str) -> int:
+        """Delete only entities whose name starts with prefix (test isolation).
+
+        Never touches the corpus graph; integration tests namespace their
+        fixtures with a unique prefix and clean up just those nodes.
+        """
+        with self._driver.session() as s:
+            result = s.run(
+                "MATCH (n:Entity) WHERE n.name STARTS WITH $prefix "
+                "DETACH DELETE n RETURN count(n) AS c",
+                prefix=prefix,
+            )
+            row = result.single()
+            return int(row["c"]) if row else 0
 
     def close(self) -> None:
         self._driver.close()

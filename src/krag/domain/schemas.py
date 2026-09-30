@@ -64,8 +64,17 @@ class Entity(BaseModel):
     def normalize(name: str) -> str:
         n = name.strip().lower()
         for suffix in (
-            " inc.", " inc", " corp.", " corp", " corporation", " ltd.", " ltd",
-            " llc", " plc", " co.", " company",
+            " inc.",
+            " inc",
+            " corp.",
+            " corp",
+            " corporation",
+            " ltd.",
+            " ltd",
+            " llc",
+            " plc",
+            " co.",
+            " company",
         ):
             if n.endswith(suffix):
                 n = n[: -len(suffix)].strip(" ,.")

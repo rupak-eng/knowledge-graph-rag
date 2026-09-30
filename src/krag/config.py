@@ -25,12 +25,22 @@ class Settings(BaseSettings):
 
     embedding_model: str = Field(default="all-MiniLM-L6-v2")
     embedding_dim: int = Field(default=384)
+    # Local snapshot path (offline VM workaround for proxied HF hub).
+    # If set and a directory, embeddings load from here instead of downloading.
+    embedding_model_path: str = Field(default="")
 
     # OpenAI-compatible LLM provider. Empty -> deterministic stub provider.
     llm_base_url: str = Field(default="")
     llm_api_key: str = Field(default="")
     llm_model: str = Field(default="")
     llm_timeout_seconds: int = Field(default=60)
+
+    # Groq (production path): credential comes from the Secure Vault surrogate
+    # at runtime — never stored in config/files. Verified models on this key:
+    # openai/gpt-oss-20b (default), openai/gpt-oss-120b (quality).
+    groq_default_model: str = Field(default="openai/gpt-oss-20b")
+    groq_quality_model: str = Field(default="openai/gpt-oss-120b")
+    groq_model_choice: str = Field(default="default")  # "default" | "quality"
 
     qa_top_k_vector: int = Field(default=8)
     qa_top_k_graph: int = Field(default=12)

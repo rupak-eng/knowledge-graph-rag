@@ -7,10 +7,10 @@ we avoid: it produces graphs nobody can query.
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class EntityType(str, Enum):
+class EntityType(StrEnum):
     COMPANY = "Company"
     SUBSIDIARY = "Subsidiary"
     PERSON = "Person"
@@ -23,18 +23,18 @@ class EntityType(str, Enum):
     RISK = "Risk"
 
 
-class RelationType(str, Enum):
-    HAS_SEGMENT = "HAS_SEGMENT"          # Company -> Segment
-    HAS_SUBSIDIARY = "HAS_SUBSIDIARY"    # Company -> Subsidiary
-    ACQUIRED = "ACQUIRED"                # Company -> Company|Acquisition
-    SELLS_PRODUCT = "SELLS_PRODUCT"      # Company -> Product
-    LED_BY = "LED_BY"                    # Company -> Person
-    REPORTS_METRIC = "REPORTS_METRIC"    # Company|Segment -> Metric
-    OPERATES_IN = "OPERATES_IN"          # Company -> Geography
-    COMPETES_WITH = "COMPETES_WITH"      # Company -> Company
-    DEPENDS_ON = "DEPENDS_ON"            # Company|Product -> Company|Technology
-    PARTNERS_WITH = "PARTNERS_WITH"      # Company -> Company
-    FACES_RISK = "FACES_RISK"            # Company -> Risk
+class RelationType(StrEnum):
+    HAS_SEGMENT = "HAS_SEGMENT"  # Company -> Segment
+    HAS_SUBSIDIARY = "HAS_SUBSIDIARY"  # Company -> Subsidiary
+    ACQUIRED = "ACQUIRED"  # Company -> Company|Acquisition
+    SELLS_PRODUCT = "SELLS_PRODUCT"  # Company -> Product
+    LED_BY = "LED_BY"  # Company -> Person
+    REPORTS_METRIC = "REPORTS_METRIC"  # Company|Segment -> Metric
+    OPERATES_IN = "OPERATES_IN"  # Company -> Geography
+    COMPETES_WITH = "COMPETES_WITH"  # Company -> Company
+    DEPENDS_ON = "DEPENDS_ON"  # Company|Product -> Company|Technology
+    PARTNERS_WITH = "PARTNERS_WITH"  # Company -> Company
+    FACES_RISK = "FACES_RISK"  # Company -> Risk
     USES_TECHNOLOGY = "USES_TECHNOLOGY"  # Company|Product -> Technology
 
 
@@ -63,7 +63,5 @@ ALLOWED_RELATIONS: frozenset[tuple[EntityType, RelationType, EntityType]] = froz
 )
 
 
-def relation_allowed(
-    src: EntityType, rel: RelationType, dst: EntityType
-) -> bool:
+def relation_allowed(src: EntityType, rel: RelationType, dst: EntityType) -> bool:
     return (src, rel, dst) in ALLOWED_RELATIONS
